@@ -27,10 +27,7 @@ public class EncryptionTextMessage {
 		
 	}  // end main
 	
-	
-	
-	
-	
+
 	
 	
 	public static void run(String strDataToEncrypt)  {
@@ -46,16 +43,20 @@ public class EncryptionTextMessage {
 		    
 		      for ( int i = strDataToEncrypt.length() - 1; i >= 0; i-- )
 		    	reverse = reverse + strDataToEncrypt.charAt(i);
-		    System.out.println(reverse); 
 		    
 		    shifter = generator.nextInt(25) +1;
-		    System.out.println("Caesar cipher shift is " + shifter);
+		    System.out.println("\t Caesar cipher shift is " + shifter);
 		    
 	//	    strCipherText = encryptVigen(reverse, key);
 	//	    System.out.println(encryptVigen(reverse, key));
-		     System.out.println(caesarCipher(reverse, shifter));
+	//	     System.out.println("Caesar Cipher: " + caesarCipher(reverse, shifter));
 		     strCipherText = caesarCipher(reverse, shifter);
-		    System.out.println(decrypt(strCipherText, shifter));
+		     String transCipher = transposition(strCipherText);
+		     
+		     System.out.println("The encrypted message is: ");
+		     System.out.println(transCipher);
+		     System.out.println("\n The decrypted message is: ");
+		     System.out.println(decrypt(transCipher, shifter));
 		    
 		//    System.out.println(decryptVigen(strCipherText, key));
 		    
@@ -87,6 +88,35 @@ public class EncryptionTextMessage {
         return res;
     }  */
 	
+	static String transposition(String msg){
+	    String trans = "";
+	    int len = msg.length();
+	    char c = ' ';
+	    char d = ' ';
+		if (len % 2 == 0)
+		{
+	    for(int x = 0, j = 1; x < len; x+=2, j+=2){
+	    		c = (char) (msg.charAt(x));
+				d = (char) (msg.charAt(j));
+				trans += d;
+				trans += c;
+				}
+		    }
+		if (len % 2 != 0)
+		{
+	    for(int x = 0, j = 1; x < len; x+=2, j+=2){
+	    		c = (char) (msg.charAt(x));
+	    		if (j < len)
+	    		{
+				d = (char) (msg.charAt(j));
+				trans += d;
+	    		}
+				trans += c;
+				}
+		    }
+	    	
+		return trans;
+	}
 	static String caesarCipher(String msg, int shift){
 	    String s = "";
 	    int len = msg.length();
@@ -94,7 +124,7 @@ public class EncryptionTextMessage {
 	        char c = (char)(msg.charAt(x) + shift);
 	        if ((Character.isLowerCase(msg.charAt(x)) && c > 'z') || (Character.isUpperCase(msg.charAt(x)) && c > 'Z'))
 	            s += (char)(msg.charAt(x) - (26-shift));
-	        else
+	        else 
 	            s += (char)(msg.charAt(x) + shift);
 	    }
 	    return s;
@@ -106,11 +136,14 @@ public class EncryptionTextMessage {
         String plainText = "";
         String reverse360 = "";
         int len = cipherText.length();
+        
+        cipherText = transposition(cipherText);
+        
 	    for(int x = 0; x < len; x++){
 	        char c = (char)(cipherText.charAt(x) + (26 - shiftKey));
 	        if ((Character.isLowerCase(cipherText.charAt(x)) && c > 'z') || (Character.isUpperCase(cipherText.charAt(x)) && c > 'Z'))
 	            plainText += (char)(cipherText.charAt(x) - (shiftKey));
-	        else
+	        else 
 	            plainText += (char)(cipherText.charAt(x) + (26 - shiftKey));
 	    }
 	      for ( int i = plainText.length() - 1; i >= 0; i-- )
